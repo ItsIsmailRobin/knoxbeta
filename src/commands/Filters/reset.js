@@ -1,0 +1,34 @@
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const delay = require('delay');
+
+module.exports = {
+  name: 'reset',
+  category: 'Filters',
+  aliases: ['r'],
+  description: '',
+  args: false,
+  usage: '',
+  userPrams: [],
+  botPrams: ['EMBED_LINKS'],
+  owner: false,
+  player: true,
+  dj: true,
+  inVoiceChannel: true,
+  sameVoiceChannel: true,
+  execute: async (message, args, client, prefix) => {
+    const msg = await message.channel.send(`<a:pristo_loading:1119466187919740929> | Turning on **Reset**. This may take a few seconds...`);
+
+    const player = client.manager.get(message.guild.id);
+            if(!player) return msg.edit(`<:pristo_cross:1119465432588505129> | No songs currently playing in this guild.`);
+            const { channel } = message.member.voice;
+            if (!channel || message.member.voice.channel !== message.guild.members.me.voice.channel) return msg.edit(`<:pristo_cross:1119465432588505129> | You need to be in a same/voice channel.`);
+
+    player.shoukaku.clearFilters()
+    const resetted = new MessageEmbed()
+        .setDescription(`<a:pristo_tick:1119464374608855040> | Filter Is Now **Disable**`)
+        .setColor("2f3136");
+
+    await delay(5000);
+    msg.edit({ content: " ", embeds: [resetted] });
+   }
+};
